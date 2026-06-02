@@ -1,0 +1,144 @@
+{
+  "name": "Push record",
+  "description": "When a record is created, push fields in another project in a new record",
+  "namespace": "Unisante\\PushRecord",
+  "authors": [
+    {
+      "name": "Vincent Faivre",
+      "email": "redcap@unisante.ch",
+      "institution": "Unisanté, centre universitaire de médecin générale et santé publique, Lausanne"
+    }
+  ],
+  "permissions": [
+    "redcap_save_record",
+    "redcap_survey_complete"
+  ],
+  "project-settings": [
+    {
+      "key": "email",
+      "name": "Email address for synchronization errors",
+      "required": true,
+      "type": "text"
+    },
+    {
+      "key": "method_to_trigger",
+      "name": "Which hook should trigger the action?",
+      "choices": [
+        {
+          "value": "1",
+          "name": "Save record"
+        },
+        {
+          "value": "0",
+          "name": "Survey complete"
+        }
+      ],
+      "required": true,
+      "type": "radio"
+    },
+    {
+      "key": "triggering_value",
+      "name": "Triggering variable when value is trueish",
+      "required": true,
+      "type": "field-list",
+      "branchingLogic": {
+        "field": "method_to_trigger",
+        "value": "1"
+      }
+    },
+    {
+      "key": "intrument_name",
+      "name": "Which survey should trigger the push",
+      "required": true,
+      "type": "form-list",
+      "branchingLogic": {
+        "field": "method_to_trigger",
+        "value": "0"
+      }
+    },
+    {
+      "key": "target_project",
+      "name": "Target project",
+      "required": true,
+      "type": "project-id"
+    },
+    {
+      "key": "target_record_id",
+      "name": "Record ID field name in destination project",
+      "required": true,
+      "type": "text"
+    },
+    {
+      "key": "record_id_or_variable",
+      "name": "Do you want to push the same record id or another variable?",
+      "choices": [
+        {
+          "value": "1",
+          "name": "Same record_id (with a prefix / suffix)"
+        },
+        {
+          "value": "0",
+          "name": "Another variable"
+        }
+      ],
+      "required": true,
+      "type": "radio"
+    },
+    {
+      "key": "target_record_id_prefix",
+      "name": "Prefix for the record ID value (ex: copie_ => copie_XXX)",
+      "required": false,
+      "type": "text",
+      "branchingLogic": {
+        "field": "record_id_or_variable",
+        "value": "1"
+      }
+    },
+    {
+      "key": "target_record_id_suffix",
+      "name": "Suffix for the record ID value (ex: _copie => XXX_copie)",
+      "required": false,
+      "type": "text",
+      "branchingLogic": {
+        "field": "record_id_or_variable",
+        "value": "1"
+      }
+    },
+    {
+      "key": "variable",
+      "name": "Variable to use as record id value",
+      "required": true,
+      "type": "field-list",
+      "branchingLogic": {
+        "field": "record_id_or_variable",
+        "value": "0"
+      }
+    },
+    {
+      "key": "fields",
+      "name": "Synchronized fields",
+      "required": false,
+      "type": "sub_settings",
+      "repeatable": true,
+      "sub_settings": [
+        {
+          "key": "fields_field_source",
+          "name": "Field source",
+          "required": true,
+          "type": "field-list"
+        },
+        {
+          "key": "fields_field_destination",
+          "name": "Field destination",
+          "required": true,
+          "type": "text"
+        },
+        {
+          "key": "fields_is_checkbox",
+          "name": "This field is a checkbox",
+          "type": "checkbox"
+        }
+      ]
+    }
+  ]
+}
